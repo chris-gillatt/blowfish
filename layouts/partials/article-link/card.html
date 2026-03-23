@@ -18,7 +18,6 @@
       {{ $featured = resources.GetRemote $url }}
       {{ end }}
       {{- if not $featured }}{{ with .Site.Params.defaultFeaturedImage }}{{ $featured = resources.Get . }}{{ end }}{{ end -}}
-      {{ if .Params.hideFeatureImage }}{{ $featured = false }}{{ end }}
       {{- with $featured -}}
       {{ if or $disableImageOptimization (strings.HasSuffix $featured ".svg")}}
         {{ with . }}
@@ -64,14 +63,17 @@
           {{ partial "article-meta/basic.html" . }}
         </div>
 
-        {{ if .Params.showSummary | default (.Site.Params.list.showSummary | default false) }}
+        {{ if .Params.showDescription | default (.Site.Params.list.showDescription | default false) }}
+        <div class="py-1 prose dark:prose-invert">
+          {{ .Params.description | plainify }}
+        </div>
+        {{ else if .Params.showSummary | default (.Site.Params.list.showSummary | default false) }}
         <div class="py-1 prose dark:prose-invert">
           {{ .Summary | plainify }}
         </div>
         {{ end }}
       </div>
       <div class="px-6 pt-4 pb-2">
-
       </div>
     </div>
   </a>
